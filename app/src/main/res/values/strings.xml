@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">JoostBremmer_pset2</string>
+    <string name="logoDescription">Madlibs logo</string>
+    <string name="submitButton">submit</string>
 </resources>
