@@ -1,4 +1,4 @@
-/*
+/**
  * Story.java
  * Madlibs
  *
@@ -17,7 +17,7 @@
  */
 
 // !YOU MAY WANT TO CHANGE THE PACKAGE BELOW SO THAT IT MATCHES YOUR PROJECT'S PACKAGE!
-package com.example.stepp.madlibs;
+package online.madeofmagicandwires.joostbremmer_pset2;
 
 import java.io.*;
 import java.util.*;
@@ -37,7 +37,10 @@ public class Story implements Serializable {
         clear();
     }
 
-    /** constructs a new Story reading its text from the given input stream */
+    /**
+     * constructs a new Story reading its text from the given input stream
+     * @return Story instance containing text from InputStream
+     */
     public Story(InputStream stream) {
         read(stream);
     }
@@ -49,16 +52,22 @@ public class Story implements Serializable {
         filledIn = 0;
     }
 
-    /** replaces the next unfilled placeholder with the given word */
+    /**
+     * replaces the next unfilled placeholder with the given word
+     * @param word
+     */
     public void fillInPlaceholder(String word) {
         if (!isFilledIn()) {
-            text = text.replace("<" + filledIn + ">", word);
+            text = text.replace("{" + filledIn + "}", word);
             filledIn++;
         }
     }
 
-    /** returns the next placeholder such as "adjective",
-     *  or empty string if story is completely filled in already */
+    /**
+     * returns the next placeholder
+     * @return the next placeholder word,
+     *         or "" if all placeholders have been filled in
+     */
     public String getNextPlaceholder() {
         if (isFilledIn()) {
             return "";
@@ -67,48 +76,76 @@ public class Story implements Serializable {
         }
     }
 
-    /** returns total number of placeholders in the story */
+    /**
+     * returns total number of placeholders in the story
+     * @return int representing the sum of placeholders
+     */
     public int getPlaceholderCount() {
         return placeholders.size();
     }
 
-    /** returns how many placeholders still need to be filled in */
+    /**
+     * returns how many placeholders still need to be filled in
+     * @return int representing the remaining amount of placeholders.
+     */
     public int getPlaceholderRemainingCount() {
         return placeholders.size() - filledIn;
     }
 
-    /** returns true if all placeholders have been filled in */
+    /**
+     * returns whether all placeholders have been filled in
+     * @return true if all placeholders have been filed in, false if not
+     */
     public boolean isFilledIn() {
         return filledIn >= placeholders.size();
     }
 
-    /** reads initial story text from the given input stream */
+    /**
+     * reads initial story text from the given input stream
+     * @param stream inputstream of the text
+     */
     public void read(InputStream stream) {
         read(new Scanner(stream));
     }
 
-    /** reads initial story text from the given Scanner */
+    /**
+     * reads initial story text from the given Scanner
+     * @param input inputstream containing the text
+     */
     private void read(Scanner input) {
+        // Note to Hella,
+        // Never use concat in loops; use StringBuilder instead.
+        StringBuilder txtBuilder = new StringBuilder(text);
+
         while (input.hasNext()) {
             String word = input.next();
+
             if (word.startsWith("<") && word.endsWith(">")) {
-                // a placeholder; replace with e.g. "<0>" so I can find/replace it easily later
+                // a placeholder; replace with e.g. "{0}" so I can find/replace it easily later
                 // (make them bold so that they stand out!)
+                // Update: We've changed "<0>" to "{0}"
+                //         to avoid confusion with HTML tags.
                 if (htmlMode) {
-                    text += " <b><" + placeholders.size() + "></b>";
+                     txtBuilder.append(" <b>{");
+                     txtBuilder.append(placeholders.size());
+                     txtBuilder.append("}</b>");
                 } else {
-                    text += " <" + placeholders.size() + ">";
+                    txtBuilder.append("{");
+                    txtBuilder.append(placeholders.size());
+                    txtBuilder.append("}");
                 }
                 // "<plural-noun>" becomes "plural noun"
-                String placeholder = word.substring(1, word.length() - 1).replace("-", " ");
+                String placeholder = word.substring(1, word.length() - 1)
+                        .replace("-", " ");
                 placeholders.add(placeholder);
             } else {
                 // a regular word; just concatenate
-                if (!text.isEmpty()) {
-                    text += " ";
+                if (txtBuilder.length() > 0) {
+                    txtBuilder.append(" ");
                 }
-                text += word;
+                txtBuilder.append(word);
             }
+            this.text = txtBuilder.toString();
         }
     }
 
