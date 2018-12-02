@@ -1,6 +1,8 @@
 package online.madeofmagicandwires.joostbremmer_pset2;
 
 import android.support.annotation.NonNull;
+import android.text.method.TextKeyListener;
+
 import java.io.InputStream;
 
 
@@ -27,6 +29,7 @@ public class Text {
         this.textId  = resId;
         this.textFileName = textFileName;
         this.textTitle = fileNameToTitle(textFileName);
+        this.textInput = null;
     }
 
     /**
@@ -54,6 +57,22 @@ public class Text {
     }
 
     /**
+     * Links a inputstream of a Text
+     * @param textInput InputStream of the file containing this Texts
+     */
+    public void setTextInput(InputStream textInput) {
+        this.textInput = textInput;
+    }
+
+    /**
+     * Returns the inputstream of a text
+     * @return InputStream of the text's file.
+     */
+    public InputStream getTextInput() {
+        return textInput;
+    }
+
+    /**
      * Returns the name of <b>this</b> text
      * @return the file name of a text instance
      */
@@ -65,6 +84,7 @@ public class Text {
      * Returns a parsed title of a text based on its file name.
      * @param fName the name of the file containing a text
      * @return the title of a text, as interpreted by its file name
+     * @see "https://stackoverflow.com/a/1086134" for title case-ing.
      */
     public static  String fileNameToTitle(String fName) {
         if(fName == null || fName.isEmpty()) {
@@ -77,25 +97,26 @@ public class Text {
                 .replace(
                         "\\.\\w{3}$",
                         "");
-        return fNameStripped;
+        if(fNameStripped.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder titleBuilder = new StringBuilder();
+        Boolean capitaliseNext = true;
+        for(char c : fNameStripped.toCharArray()) {
+            if(Character.isSpaceChar(c)) {
+                capitaliseNext = true;
+            } else if(capitaliseNext) {
+                c = Character.toTitleCase(c);
+                capitaliseNext = false;
+            }
+             titleBuilder.append(c);
+        }
+
+        return titleBuilder.toString();
     }
 
-    /**
-     * Opens <b>this</b> text
-     * @return a inputstream of a text instance
-     */
-    public InputStream openText() {
-        return openText(this.textId);
-    }
 
-    /**
-     * Opens a Resource file
-     * @param textId the resource id of a file containing a text
-     * @return a inputstream object of the file linked to the resource id
-     */
-    public static InputStream openText(int textId) {
-        return null;
-    }
 
     /**
      * Returns a string representing <b>this</b> Text
