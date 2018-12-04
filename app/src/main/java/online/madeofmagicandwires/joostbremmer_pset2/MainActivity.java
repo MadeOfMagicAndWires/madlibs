@@ -1,10 +1,10 @@
 package online.madeofmagicandwires.joostbremmer_pset2;
 
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -12,6 +12,8 @@ import android.widget.Spinner;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    public final static String TEXT_EXTRA_NAME = "textExtra";
 
     /** Resource id of the Spinner dropdown **/
     private final int dropDownId = R.id.dropdown;
@@ -39,11 +41,12 @@ public class MainActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
-            // TODO: Launch Second Activity
             Spinner dropDown = findViewById(dropDownId);
             Text txt = (Text) dropDown.getSelectedItem();
             if(txt != null) {
-                Log.d("submit", "picked text " + txt.getTextTitle());
+                Intent intent = new Intent(v.getContext(), StoryActivity.class);
+                intent.putExtra(TEXT_EXTRA_NAME, txt);
+                startActivity(intent);
             } else {
                 Snackbar sb = Snackbar.make(v, "Please select a text", Snackbar.LENGTH_SHORT);
                 sb.show();

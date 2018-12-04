@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,8 +78,20 @@ public class TextReader {
         return context.getResources().getResourceEntryName(resId);
     }
 
-
-
-
+    /**
+     * Returns a Story instance based on a text.
+     * @param context Current application/activity context
+     * @param text text object the user selected
+     * @return a Story instance created from the text
+     */
+    public static Story getStoryFromText(Context context, Text text) {
+        if(text.getTextInput() != null) {
+            return new Story(text.getTextInput());
+        } else {
+            return new Story(
+                    context.getResources().openRawResource(text.getTextId())
+            );
+        }
+    }
 
 }

@@ -1,9 +1,8 @@
 package online.madeofmagicandwires.joostbremmer_pset2;
 
 import android.support.annotation.NonNull;
-import android.text.method.TextKeyListener;
-
 import java.io.InputStream;
+import java.io.Serializable;
 
 
 /**
@@ -14,7 +13,7 @@ import java.io.InputStream;
  * @author Joost Bremmer
  * @version 1.0
  */
-public class Text {
+public class Text implements Serializable {
     private final int textId;
     private final String textTitle;
     private final String textFileName;
@@ -115,8 +114,6 @@ public class Text {
 
         return titleBuilder.toString();
     }
-
-
 
     /**
      * Returns a string representing <b>this</b> Text

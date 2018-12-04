@@ -23,15 +23,22 @@ import java.io.*;
 import java.util.*;
 
 public class Story implements Serializable {
-    private String text;                 // text of the story
-    private List<String> placeholders;   // list of placeholders to fill in
-    private int filledIn;                // number of placeholders that have been filled in
-    private boolean htmlMode;            // set to true to surround placeholders with <b></b> tags
+    /** text of the story **/
+    private String text;
+    /** list of placeholders to fill in **/
+    private List<PlaceholderType> placeholders;
+    /** list of standardised placeholder types **/
+    //private List<PlaceholderType> placeholderTypes;
+    /** number of placeholders that have been filled in **/
+    private int filledIn;
+    /** set to true to surround placeholders with <b></b> tags **/
+    private boolean htmlMode;
 
     {
         // instance initializer; runs before any constructor
         text = "";
-        placeholders = new ArrayList<String>();
+        placeholders = new ArrayList<PlaceholderType>();
+        // placeholderTypes = new ArrayList<PlaceholderType>();
         filledIn = 0;
         htmlMode = false;
         clear();
@@ -68,11 +75,25 @@ public class Story implements Serializable {
      * @return the next placeholder word,
      *         or "" if all placeholders have been filled in
      */
-    public String getNextPlaceholder() {
+    public PlaceholderType getNextPlaceholder() {
         if (isFilledIn()) {
-            return "";
+            return PlaceholderType.NO_NEXT_PLACEHOLDER;
         } else {
             return placeholders.get(filledIn);
+        }
+    }
+
+    /**
+     * Returns a specific placeholder's type
+     * @param position placeholders position in the placeholder list
+     * @return the type of the placeholder saved in position
+     * @see PlaceholderType
+     */
+    public PlaceholderType getPlaceholder(int position) {
+        if(position < placeholders.size()) {
+            return placeholders.get(Math.abs(position));
+        } else {
+            return PlaceholderType.NO_NEXT_PLACEHOLDER;
         }
     }
 
@@ -137,7 +158,7 @@ public class Story implements Serializable {
                 // "<plural-noun>" becomes "plural noun"
                 String placeholder = word.substring(1, word.length() - 1)
                         .replace("-", " ");
-                placeholders.add(placeholder);
+                placeholders.add(PlaceholderType.parsePlaceHolderType(placeholder));
             } else {
                 // a regular word; just concatenate
                 if (txtBuilder.length() > 0) {
