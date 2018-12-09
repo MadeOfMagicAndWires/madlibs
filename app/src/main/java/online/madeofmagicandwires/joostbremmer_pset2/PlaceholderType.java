@@ -9,6 +9,7 @@ public enum PlaceholderType {
     ADJECTIVE,
     ADJECTIVE_INTERESTING,
     ADJECTIVE_EXCITING,
+    ADJECTIVE_UNUSUAL,
     ADVERB,
     BODY_PART,
     CITY,
@@ -39,16 +40,19 @@ public enum PlaceholderType {
             case "adjective":
                 return PlaceholderType.ADJECTIVE;
 
-            case "interesting-adjective":
+            case "interesting adjective":
                 return PlaceholderType.ADJECTIVE_INTERESTING;
 
-            case "exciting-adjective":
+            case "exciting adjective":
                 return PlaceholderType.ADJECTIVE_EXCITING;
+
+            case "unusual adjective":
+                return PlaceholderType.ADJECTIVE_UNUSUAL;
 
             case "adverb":
                 return PlaceholderType.ADVERB;
 
-            case "body-part":
+            case "body part":
                 return PlaceholderType.BODY_PART;
 
             case "city":
@@ -57,16 +61,16 @@ public enum PlaceholderType {
             case "color!":
                 return PlaceholderType.COLOR;
 
-            case "funny-noise":
+            case "funny noise":
                 return PlaceholderType.FUNNY_NOISE;
 
             case "job":
                 return PlaceholderType.JOB;
 
-            case "job-title":
+            case "job title":
                 return PlaceholderType.JOB_TITLE;
 
-            case "male-name":
+            case "male name":
                 return PlaceholderType.MALE_NAME;
 
             case "number":
@@ -108,6 +112,8 @@ public enum PlaceholderType {
                 return "An exciting adjective";
             case ADJECTIVE_INTERESTING:
                 return "An interesting adjective";
+            case ADJECTIVE_UNUSUAL:
+                return "An unusual adjective";
             case ADVERB:
                 return "An adverb";
             case BODY_PART:
@@ -131,7 +137,7 @@ public enum PlaceholderType {
             case PERSON_NAME:
                 return "A person's name";
             case PLACE:
-                return "A placename";
+                return "A place";
             case PLURAL:
                 return "A plural noun";
             case VERB:

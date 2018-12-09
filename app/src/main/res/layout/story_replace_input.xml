@@ -3,32 +3,40 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="5dp">
 
     <TextView
         android:id="@+id/inputLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_gravity="fill_horizontal"
+        android:textAlignment="center"
 
         tools:text="noun"/>
-    <EditText
-        android:id="@+id/inputField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_weight="1"
 
-        tools:hint="please write a noun"/>
-
-    <Button
-        android:id="@+id/inputSubmit"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="@string/submitButton"
-        android:textAllCaps="true"/>
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/inputField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_weight="1"
+
+            tools:hint="please write a noun"/>
+
+        <Button
+            android:id="@+id/inputSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/submitButton"
+            android:textAllCaps="true"/>
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -6,14 +6,19 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.List;
 
 public class StoryActivity extends AppCompatActivity {
 
+
+
     private Story story;
     private Text receivedText;
-
+    private StoryInputFieldsAdapter adapter;
     /**
      * onCreate method, is called when the activity is drawn
      * @param savedInstanceState bundle of saved data from previous state
@@ -52,6 +57,9 @@ public class StoryActivity extends AppCompatActivity {
             setStory(receivedText);
             setRecyclerView();
         }
+        if(adapter != null) {
+            setSubmitButton();
+        }
     }
 
     /**
@@ -81,13 +89,40 @@ public class StoryActivity extends AppCompatActivity {
     private void setRecyclerView() {
         RecyclerView container = findViewById(R.id.inputContainer);
         if(container != null) {
-            StoryInputFieldsAdapter adapter = new StoryInputFieldsAdapter(this, story);
+            adapter = new StoryInputFieldsAdapter(this, story);
             RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
             container.setAdapter(adapter);
             container.setLayoutManager(manager);
         }
 
     }
+
+    /**
+     * Initiates the final "Submit" so that when clicked it applies the replacement changes and shows
+     * the Story's text.
+     */
+    private void setSubmitButton() {
+        Button btn = findViewById(R.id.inputCommit);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean changesCommited = adapter.commitReplacements();
+                if(changesCommited) {
+                    showStory();
+                }
+            }
+        });
+    }
+
+    /**
+     * Shows the Story's text in the current activity
+     */
+    private void showStory() {
+        setContentView(R.layout.show_story);
+        TextView storyText = findViewById(R.id.storyText);
+        storyText.setText(story.toString());
+    }
+
 
 
 

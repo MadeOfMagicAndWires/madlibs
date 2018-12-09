@@ -151,7 +151,7 @@ public class Story implements Serializable {
                      txtBuilder.append(placeholders.size());
                      txtBuilder.append("}</b>");
                 } else {
-                    txtBuilder.append("{");
+                    txtBuilder.append(" {");
                     txtBuilder.append(placeholders.size());
                     txtBuilder.append("}");
                 }

@@ -2,4 +2,6 @@
     <string name="app_name">Madlibs</string>
     <string name="logoDescription">Madlibs logo</string>
     <string name="submitButton">submit</string>
+    <string name= "CHECKMARK">&#10003;</string>
+    <string name="inputHeader">Fill in the words to complete the story</string>
 </resources>
