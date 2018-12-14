@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -119,8 +121,22 @@ public class StoryActivity extends AppCompatActivity {
      */
     private void showStory() {
         setContentView(R.layout.show_story);
-        TextView storyText = findViewById(R.id.storyText);
-        storyText.setText(story.toString());
+        TextView storyTitle = findViewById(R.id.storyTitle);
+        WebView storyText = findViewById(R.id.storyText);
+
+        // set text title from recievedText
+        storyTitle.setText(receivedText.getTextTitle());
+
+        // set data and settings from story
+        // @see https://stackoverflow.com/q/21694306
+        WebSettings config = storyText.getSettings();
+        config.setDefaultFontSize(20);
+        storyText.setBackgroundColor(getColor(R.color.backgroundDefault));
+
+        // load data
+        Log.d("html data shown", story.toString());
+        storyText.loadData(story.toString(), "text/html; charset=utf-8", "utf-8");
+
     }
 
 

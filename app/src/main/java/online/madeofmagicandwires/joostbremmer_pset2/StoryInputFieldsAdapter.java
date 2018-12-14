@@ -3,6 +3,9 @@ package online.madeofmagicandwires.joostbremmer_pset2;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -27,7 +30,10 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
     /**
      * ViewHolder class used as container for replacement input fields.
      */
-    public class StoryInputFieldViewHolder extends RecyclerView.ViewHolder implements EditText.OnEditorActionListener, View.OnClickListener {
+    public class StoryInputFieldViewHolder extends RecyclerView.ViewHolder implements
+            EditText.OnEditorActionListener,
+            TextWatcher,
+            View.OnClickListener {
 
         public View root;
         public TextView inputLabel;
@@ -110,11 +116,85 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
             replacements.add(pos, replacement);
 
             // update views
-            inputSubmit.setText(R.string.CHECKMARK);
-            inputSubmit.setBackgroundColor(root.getResources().getColor(R.color.darkGreen, null));
-            inputSubmit.setTextColor(root.getResources().getColor(R.color.white, null));
+            onBindViewHolder(this, pos);
 
+        }
 
+        /**
+         * Updates the submit Button's appearance based on whether user data has been submitted
+         * @param userInputSubmitted true if data has been submitted,
+         *                           false if user data has not been submitted yet,
+         *                           or has been changed since.
+         */
+        private void showDataSubmittedButton(Boolean userInputSubmitted) {
+            if(userInputSubmitted) {
+                inputSubmit.setText(R.string.CHECKMARK);
+                inputSubmit.setBackgroundColor(mContext.getColor(R.color.darkGreen));
+                inputSubmit.setTextColor(mContext.getColor(R.color.white));
+            } else {
+                inputSubmit.setText(R.string.submitButton);
+                inputSubmit.setBackgroundColor(mContext.getColor(R.color.btnDefault));
+                inputSubmit.setTextColor(mContext.getColor(android.R.color.black));
+            }
+
+        }
+
+        /**
+         * Only required for implementation of TextWatcher; does nothing
+         * @see TextWatcher
+         * @param s     text before change
+         * @param start start of sequence
+         * @param count length of sequence
+         * @param after length of sequence after it is modified by this method
+         */
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        /**
+         * Only required for implementation of TextWatcher; does nothing
+         * @see TextWatcher
+         * @param s     text on change
+         * @param start length on start of change
+         * @param before length before change
+         * @param count length after change
+         */
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        /**
+         * This method is called to notify you that, somewhere within
+         * <code>s</code>, the text has been changed.
+         * It is legitimate to make further changes to <code>s</code> from
+         * this callback, but be careful not to get yourself into an infinite
+         * loop, because any changes you make will cause this method to be
+         * called again recursively.
+         * (You are not told where the change took place because other
+         * afterTextChanged() methods may already have made other changes
+         * and invalidated the offsets.  But if you need to know here,
+         * you can use {@link Spannable#setSpan} in {@link #onTextChanged}
+         * to mark your place and then look up from here where the span
+         * ended up.
+         *
+         * @param s
+         */
+        @Override
+        public void afterTextChanged(Editable s) {
+            String updatedReplacement = s.toString();
+            int pos = getAdapterPosition();
+
+            // updates the button appearance based on whether the user inputted replacement has been
+            // submitted yet
+            if (pos < replacements.size() && updatedReplacement.equalsIgnoreCase(getReplacementItem(pos))) {
+                // input is already submitted
+                showDataSubmittedButton(true);
+            } else  {
+                // (updated) input has not been submitted yet
+                showDataSubmittedButton(false);
+            }
         }
     }
 
@@ -176,13 +256,31 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
 
     @Override
     public void onBindViewHolder(@NonNull StoryInputFieldViewHolder viewHolder, int i) {
+
+        // this is always the same
         PlaceholderType placeholder = mStory.getPlaceholder(i);
         viewHolder.inputLabel.setText(placeholder.toString() + ":");
         viewHolder.inputField.setHint("Please type " + placeholder.toString().toLowerCase());
 
-        // set eventlisteners
+        //this data changes on whether the user has already inputted data
+        if(i < replacements.size()) {
+            // user inputted replacement data is present set, set correct data
+            viewHolder.inputField.setText(replacements.get(i));
+            viewHolder.showDataSubmittedButton(true);
+
+
+        } else {
+            // user inputted replacement data is NOT present, set to defaults.
+            viewHolder.inputField.setText("");
+            viewHolder.showDataSubmittedButton(false);
+
+        }
+
+        // set eventlisteners for text change, editor action keys and submit button
+        viewHolder.inputField.addTextChangedListener(viewHolder);
         viewHolder.inputSubmit.setOnClickListener(viewHolder);
         viewHolder.inputField.setOnEditorActionListener(viewHolder);
+
 
     }
 
@@ -197,7 +295,7 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
      * @return true if the placeholders have all been filled in, false if something went wrong.
      */
     public boolean commitReplacements() {
-        if(replacements.size() == itemCount) {
+        if(replacements.size() >= itemCount) {
             for (int i = 0; i < itemCount; i++) {
                 String replacement = replacements.get(i);
                 mStory.fillInPlaceholder(replacement);
@@ -234,6 +332,12 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
             return replacements.get(position);
     }
 
+
+    /**
+     * Returns the placeholder type of an item
+     * @param position position of item
+     * @return the placeholder type of the item at position
+     */
     public PlaceholderType getPlaceholderItem(int position) {
         return mStory.getPlaceholder(position);
     }

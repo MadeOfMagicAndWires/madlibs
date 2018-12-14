@@ -23,6 +23,12 @@ import java.io.*;
 import java.util.*;
 
 public class Story implements Serializable {
+
+    /** properly formed HTML header **/
+    public static final String HTML_START = "<!DOCTYPE html><html lang='en'><head><title>Madlibs</title></head><body><p>";
+    public static final String HTML_END = "</p></body></html>";
+
+
     /** text of the story **/
     private String text;
     /** list of placeholders to fill in **/
@@ -31,7 +37,7 @@ public class Story implements Serializable {
     //private List<PlaceholderType> placeholderTypes;
     /** number of placeholders that have been filled in **/
     private int filledIn;
-    /** set to true to surround placeholders with <b></b> tags **/
+    /** set to true to surround placeholders with <b>bold</b> tags **/
     private boolean htmlMode;
 
     {
@@ -40,7 +46,7 @@ public class Story implements Serializable {
         placeholders = new ArrayList<PlaceholderType>();
         // placeholderTypes = new ArrayList<PlaceholderType>();
         filledIn = 0;
-        htmlMode = false;
+        htmlMode = true;
         clear();
     }
 
@@ -134,9 +140,14 @@ public class Story implements Serializable {
      * @param input inputstream containing the text
      */
     private void read(Scanner input) {
-        // Note to Hella,
+
         // Never use concat in loops; use StringBuilder instead.
         StringBuilder txtBuilder = new StringBuilder(text);
+
+        // if html is on, add properly formed html code up to <p>
+        if(htmlMode) {
+            txtBuilder.append(HTML_START);
+        }
 
         while (input.hasNext()) {
             String word = input.next();
@@ -166,8 +177,16 @@ public class Story implements Serializable {
                 }
                 txtBuilder.append(word);
             }
-            this.text = txtBuilder.toString();
+
         }
+
+
+        // lastly, when html is on, close all remaining html tags
+        if(htmlMode) {
+            txtBuilder.append(HTML_END);
+        }
+
+        this.text = txtBuilder.toString();
     }
 
     /** returns story text */

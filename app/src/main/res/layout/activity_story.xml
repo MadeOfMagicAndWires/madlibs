@@ -47,7 +47,6 @@
             android:id="@+id/inputCommit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="false"
             android:text="@string/submitButton"
             android:textAlignment="center" />
     </LinearLayout>
