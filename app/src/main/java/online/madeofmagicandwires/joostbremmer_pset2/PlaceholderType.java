@@ -3,7 +3,7 @@ package online.madeofmagicandwires.joostbremmer_pset2;
 /**
  * Represents the type of word a placeholder is to be replaced by
  *
- * @note switch-case hell.
+ * switch-case hell.
  */
 public enum PlaceholderType {
     ADJECTIVE,

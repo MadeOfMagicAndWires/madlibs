@@ -1,3 +1,9 @@
+// !YOU MAY WANT TO CHANGE THE PACKAGE BELOW SO THAT IT MATCHES YOUR PROJECT'S PACKAGE!
+package online.madeofmagicandwires.joostbremmer_pset2;
+
+import java.io.*;
+import java.util.*;
+
 /**
  * Story.java
  * Madlibs
@@ -15,47 +21,48 @@
  * You can get the story's text by calling its toString method.
  * A Story is Serializable, so it can be packed into an Intent as "extra" data.
  */
-
-// !YOU MAY WANT TO CHANGE THE PACKAGE BELOW SO THAT IT MATCHES YOUR PROJECT'S PACKAGE!
-package online.madeofmagicandwires.joostbremmer_pset2;
-
-import java.io.*;
-import java.util.*;
-
 public class Story implements Serializable {
 
     /** properly formed HTML header **/
-    public static final String HTML_START = "<!DOCTYPE html><html lang='en'><head><title>Madlibs</title></head><body><p>";
-    public static final String HTML_END = "</p></body></html>";
+    public static final boolean HTML_DEFAULT = true;
+    private static final String HTML_START = "<!DOCTYPE html><html lang='en'><head><title>Madlibs</title></head><body><p>";
+    private static final String HTML_END = "</p></body></html>";
+
 
 
     /** text of the story **/
     private String text;
     /** list of placeholders to fill in **/
     private List<PlaceholderType> placeholders;
-    /** list of standardised placeholder types **/
-    //private List<PlaceholderType> placeholderTypes;
     /** number of placeholders that have been filled in **/
     private int filledIn;
     /** set to true to surround placeholders with <b>bold</b> tags **/
     private boolean htmlMode;
 
-    {
-        // instance initializer; runs before any constructor
+    /**
+     * constructs a new Story, reading its text from the given input stream, and formatting it
+     * in html or plaintext
+     * @param stream  input stream containing the story's text
+     * @param useHtml whether to format the story's text as html or plaintext;
+     *                true for html-formatted
+     *                false for plaintext
+     */
+    public Story(InputStream stream, boolean useHtml) {
         text = "";
-        placeholders = new ArrayList<PlaceholderType>();
-        // placeholderTypes = new ArrayList<PlaceholderType>();
+        placeholders = new ArrayList<>();
         filledIn = 0;
-        htmlMode = true;
+        htmlMode = useHtml;
         clear();
+        read(stream);
     }
 
     /**
      * constructs a new Story reading its text from the given input stream
-     * @return Story instance containing text from InputStream
+     * uses the {@link #HTML_DEFAULT} to choose how to format the text (plaintext or html)
+     * @param stream input stream containing the story's text
      */
     public Story(InputStream stream) {
-        read(stream);
+        this(stream, Story.HTML_DEFAULT);
     }
 
     /** resets the story back to an empty initial state */
@@ -67,7 +74,7 @@ public class Story implements Serializable {
 
     /**
      * replaces the next unfilled placeholder with the given word
-     * @param word
+     * @param word the word to replace the placeholder
      */
     public void fillInPlaceholder(String word) {
         if (!isFilledIn()) {
@@ -189,7 +196,11 @@ public class Story implements Serializable {
         this.text = txtBuilder.toString();
     }
 
-    /** returns story text */
+    /**
+     * returns story text
+     * @return the Story's text as a human readable String
+     */
+    @Override
     public String toString() {
         return text;
     }

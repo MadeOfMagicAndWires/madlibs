@@ -11,6 +11,7 @@ import android.widget.Spinner;
 
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity {
 
     public final static String TEXT_EXTRA_NAME = "textExtra";
@@ -20,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     /** list of text objects used by Spinner dropdown */
     private List<Text> texts;
-    /** TextAdapter used by Spinner dropdown **/
-    private TextDropDownAdapter adapter;
 
 
     /**
@@ -63,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public void populateDropdown() {
         texts = TextReader.populateList(this, TextReader.TEXT_RES_IDS);
-        adapter = new TextDropDownAdapter(
+        /* TextAdapter used by Spinner dropdown */ /** TextAdapter used by Spinner dropdown **/
+        TextDropDownAdapter adapter = new TextDropDownAdapter(
                 this,
                 R.layout.dropdown_option,
                 texts,

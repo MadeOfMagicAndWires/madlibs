@@ -3,12 +3,11 @@ package online.madeofmagicandwires.joostbremmer_pset2;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class TextReader {
 
     public static final int[] TEXT_RES_IDS = new int[] {
@@ -89,7 +88,8 @@ public class TextReader {
             return new Story(text.getTextInput());
         } else {
             return new Story(
-                    context.getResources().openRawResource(text.getTextId())
+                    context.getResources().openRawResource(text.getTextId()),
+                    Story.HTML_DEFAULT
             );
         }
     }

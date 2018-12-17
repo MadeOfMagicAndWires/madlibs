@@ -42,7 +42,7 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
 
         /**
          * ViewHolder constructor.
-         * @param itemView
+         * @param itemView view to be held in the viewholder
          */
         public StoryInputFieldViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,7 +100,7 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
 
         /**
          * Submits the data to the list of words to replace placeholders.
-         * @param replacement
+         * @param replacement replacement to be saved into the list
          */
         private void submitReplacement(String replacement) {
             int pos = getAdapterPosition();
@@ -179,7 +179,7 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
          * to mark your place and then look up from here where the span
          * ended up.
          *
-         * @param s
+         * @param s text that has been changed
          */
         @Override
         public void afterTextChanged(Editable s) {
@@ -242,10 +242,10 @@ public class StoryInputFieldsAdapter extends RecyclerView.Adapter<StoryInputFiel
     }
 
     /**
-     * Creates a StoryInputFielViewHolder
+     * Creates a StoryInputFieldViewHolder
      * @param parent parent RecyclerView
      * @param i position of
-     * @return
+     * @return unbound viewholder instance
      */
     @NonNull
     @Override
